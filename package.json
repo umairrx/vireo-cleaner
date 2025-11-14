@@ -1,0 +1,182 @@
+{
+  "name": "vireo-cleaner",
+  "displayName": "Vireo Cleaner",
+  "description": "A lightweight utility to automatically clean code by removing unwanted comment patterns using customizable regex rules.",
+  "icon": "logo.png",
+  "version": "1.0.1",
+  "publisher": "umairrx",
+  "author": {
+    "name": "Umair",
+    "url": "https://github.com/umairrx"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umairrx/vireo-cleaner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/umairrx/vireo-cleaner/issues"
+  },
+  "homepage": "https://github.com/umairrx/vireo-cleaner#readme",
+  "engines": {
+    "vscode": "^1.106.0"
+  },
+  "categories": [
+    "Other",
+    "Formatters"
+  ],
+  "keywords": [
+    "comments",
+    "remove",
+    "clean",
+    "formatter",
+    "vireo",
+    "cleaner",
+    "code-quality",
+    "javascript",
+    "typescript",
+    "vue",
+    "react",
+    "jsx",
+    "regex",
+    "customizable"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vireo.removeComments",
+        "title": "Vireo: Remove Comments in Current File"
+      },
+      {
+        "command": "vireo.removeCommentsAll",
+        "title": "Vireo: Remove Comments in All Project Files"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "vireo.removeComments",
+          "group": "1_modification",
+          "when": "editorTextFocus"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "vireo.removeComments"
+        },
+        {
+          "command": "vireo.removeCommentsAll"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "vireo.removeComments",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+alt+r",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "vireo.removeCommentsAll",
+        "key": "ctrl+alt+shift+r",
+        "mac": "cmd+alt+shift+r"
+      }
+    ],
+    "configuration": {
+      "title": "Vireo Cleaner",
+      "properties": {
+        "vireo.supportedFileTypes": {
+          "type": "array",
+          "default": [
+            "js",
+            "jsx",
+            "ts",
+            "tsx",
+            "vue",
+            "html",
+            "css",
+            "scss"
+          ],
+          "description": "File extensions to process when cleaning all files.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "vireo.preserveDirectives": {
+          "type": "array",
+          "default": [
+            "es",
+            "biome",
+            "@ts"
+          ],
+          "description": "Preserve // comments that start with these prefixes (e.g., eslint, biome, @ts-ignore).",
+          "items": {
+            "type": "string"
+          }
+        },
+        "vireo.regexPatterns": {
+          "type": "array",
+          "description": "Custom regex patterns used to remove comments and other code fragments.",
+          "default": [
+            {
+              "name": "JSX Comments",
+              "pattern": "\\{\\s*\\/\\*\\s*(?!es|biome|@ts)[\\s\\S]*?\\*\\/\\s*\\}",
+              "description": "Removes JSX-style block comments like {/* comment */}.",
+              "enabled": true
+            },
+            {
+              "name": "Single-line Comments",
+              "pattern": "(?<!\\S)\\/\\/(?!\\s*(?:es|biome|@ts)).*",
+              "description": "Remove // single-line comments except those starting with es, biome, or @ts",
+              "enabled": true
+            }
+          ],
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "pattern"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Display name for the regex pattern."
+              },
+              "pattern": {
+                "type": "string",
+                "description": "Regex pattern to remove content (without slashes)."
+              },
+              "description": {
+                "type": "string",
+                "description": "Explains what the regex removes."
+              },
+              "enabled": {
+                "type": "boolean",
+                "description": "Enable or disable this pattern.",
+                "default": true
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "~16.18.126",
+    "@types/vscode": "^1.106.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
+    "typescript": "^5.9.3"
+  }
+}
