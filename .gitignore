@@ -8,7 +8,6 @@ pnpm-debug.log*
 # Build output
 out/
 dist/
-*.vsix
 
 # TypeScript
 *.tsbuildinfo
